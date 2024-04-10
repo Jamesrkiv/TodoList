@@ -8,12 +8,11 @@ If all goes to plan, Electron will be used in order to package this web applicat
 
 ```mermaid
 graph TB
-A(Initial development as web app) --Works--> B(Integrate Electron/Node.js)
-A --Broke it--> C(Fix bugs)
-C --Oh no --> C
-C --Works--> B
-B --Broke it again--> E(Fix Bugs)
-E --Please help--> E
-B --Works--> D(Package standalone app)
-E --Works--> D
+L[/Plan features & layout/] ==> A
+A(Initial development as web app) ==> B(Integrate Electron/Node.js)
+B ==> C(Package standalone app w/ Electron)
+C -.->|Everything is broken| A
+
+A -.->|Bugfixes| A
+B -.->|Bugfixes| B
 ```
