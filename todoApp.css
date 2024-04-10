@@ -1,0 +1,28 @@
+body {
+	min-width: 250px;
+}
+.fill {
+	min-height: calc(100vh - 56px);
+	height: 100%;
+}
+.inln {
+	display: inline;
+}
+#wrapper {
+    margin-left:auto;
+    margin-right:auto;
+    min-width: 350px;
+}
+#add-btn {
+	margin-bottom: 10px;
+	margin-left: 10px;
+}
+.normal-a {
+	color: inherit;
+	text-decoration: inherit;
+}
+#todo-info-div {
+	margin-top: auto;
+	margin-bottom: auto;
+	margin-left: 8px;
+}

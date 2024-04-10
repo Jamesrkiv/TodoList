@@ -1,30 +1,19 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<!-- Meta Tags -->
 		<meta charset="utf-8">
 	    <meta name="viewport" content="width=device-width, initial-scale=1">
-	    <!-- Bootstrap -->
 	    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-		<!-- Title -->
+		<script src="./todoApp.js"></script>
 		<title>Todo</title>
-		<!-- Style -->
-		<style type="text/css">
-			body {
-				min-width: 250px;
-			}
-	        .fill {
-	        	min-height: calc(100vh - 56px);
-	        	height: 100%;
-	        }
-		</style>
+		<link rel="stylesheet" href="./todoApp.css">
 	</head>
 	<body>
 		<!-- Navbar -->
 		<nav class="navbar navbar-expand-sm navbar-light bg-light p-2 sticky-top">
 			<div class="container-fluid">
-				<a class="navbar-brand" href="#">Todo List</a>
+				<a class="navbar-brand">Todo List</a>
 				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 			      	<span class="navbar-toggler-icon"></span>
 		      	</button>
@@ -33,49 +22,33 @@
   					<ul class="navbar-nav me-auto mb-lg-0">
 						<!-- Dropdown -->
 						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-								Sort by...
-							</a>
+							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Sort by...</a>
 							<ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
 								<li><a class="dropdown-item" href="#">Default</a></li>
 								<li><a class="dropdown-item" href="#">Due by date</a></li>
-								<li><a class="dropdown-item" href="#">Created date</a></li>
 								<li><a class="dropdown-item" href="#">Priority</a></li>
-								<li><a class="dropdown-item" href="#">Category</a></li>
 							</ul>
 						</li>
   					</ul>
-  					<span class="navbar-text">
-						You've got this ♥
-					</span>
+  					<span class="navbar-text">You've got this ♥</span>
   				</div>
 			</div>
 		</nav>
 		<!-- Main Content -->
-		<div class="container-fluid">
+		<div class="container-fluid" id="wrapper">
 			<div class="row">
 				<!-- Left Column -->
 			    <div class="col p-3 border bg-light fill">
-			    	<h3>Your Items</h3>
+			    	<div>
+			    		<h3 class="inln">Your Items</h3>
+			    		<button type="button" class="inln btn btn-outline-primary" id="add-btn">Add new</button>
+			    	</div>
 			    	<!-- List group -->
-			    	<ul class="list-group todo-lists overflow-auto" style="max-height: calc(100vh - 90px);">
-
-						<!-- START EXAMPLE ITEM ////////////////////////////// -->
-						<li class="list-group-item p-3">
-							<input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for following text input">
-							<p class="p-2" style="display: inline">Test</p>
-						</li>
-						<!-- END EXAMPLE ITEM //////////////////////////////// -->
-
+			    	<ul class="list-group overflow-auto" id="todo-list" style="max-height: calc(100vh - 90px);">
+			    		<!-- Todo list items populated here -->
 					</ul>
 			    </div>
-			    <!-- Right Column -->
-			    <!-- <div class="col p-3 border bg-light"> -->
-			    <!-- </div> -->
 			</div>
 		</div>
 	</body>
-	<footer>
-		<!-- Footer -->
-	</footer>
 </html>
