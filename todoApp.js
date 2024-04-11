@@ -1,4 +1,3 @@
-
 // GLOBAL VARIABLES /////////////////////////////////////////////////////////////////////////////////////////
 
 var tracking_num = 0;
@@ -6,11 +5,9 @@ var tracking_num = 0;
 // FUNCTIONS ////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Creates a new item in the todo list
-function createListItem(text, desc, due, priority, idnum)
-{
+function createListItem(text, desc, due, priority, idnum) {
 	var priorityHTML = "";
-	switch(priority)
-	{
+	switch(priority) {
 		case "low":
 			priorityHTML = ' <span class="badge bg-info rounded-pill v-middle">Low</span>';
 			break;
@@ -40,14 +37,12 @@ function createListItem(text, desc, due, priority, idnum)
 }
 
 // Deletes an existing item in the todo list
-function deleteListItem(idnum)
-{
+function deleteListItem(idnum) {
 	document.getElementById("item"+idnum).remove();
 }
 
 // Function to run when the form for creating a new todo list item is submitted
-function submitItemForm()
-{
+function submitItemForm() {
 	createListItem("Test list item "+tracking_num, "Test", "04/08/24", "high", tracking_num);
 	tracking_num++;
 }
