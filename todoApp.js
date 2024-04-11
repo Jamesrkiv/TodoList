@@ -1,4 +1,9 @@
+
+// GLOBAL VARIABLES /////////////////////////////////////////////////////////////////////////////////////////
+
 var tracking_num = 0;
+
+// FUNCTIONS ////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Creates a new item in the todo list
 function createListItem(text, desc, due, priority, idnum)
@@ -46,5 +51,3 @@ function submitItemForm()
 	createListItem("Test list item "+tracking_num, "Test", "04/08/24", "high", tracking_num);
 	tracking_num++;
 }
-
-console.log("Process started...");

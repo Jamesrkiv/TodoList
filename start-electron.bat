@@ -1,1 +1,1 @@
-powershell -NoExit npm start
+powershell npm start
