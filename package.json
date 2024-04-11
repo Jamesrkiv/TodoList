@@ -1,0 +1,15 @@
+{
+  "name": "electron-app",
+  "version": "1.0.0",
+  "description": "This is just meant to be a simple todo list app to keep me in practice and potentially get a useful tool out of it. The inevitable feature creep will also be a good opportunity to learn some new things.\r <br>",
+  "main": "todoApp.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
+  },
+  "author": "James Kent",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^29.3.0"
+  }
+}
