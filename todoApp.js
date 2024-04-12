@@ -1,12 +1,12 @@
 // GLOBAL VARIABLES /////////////////////////////////////////////////////////////////////////////////////////
 
-var tracking_num = 0;
+var tracking_num = parseInt(Date.now());
 var todoData = "";
 
 // FUNCTIONS ////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Creates a new item in the todo list
-function createListItem(text, desc, due, priority, idnum) {
+async function createListItem(text, desc, due, priority, idnum) {
 	var priorityHTML = "";
 	switch(priority) {
 		case "low":
@@ -35,7 +35,7 @@ function createListItem(text, desc, due, priority, idnum) {
 				'</li>';
 	var list = document.getElementById("todo-list");
 	list.innerHTML += item;
-	saveData();
+	await saveData();
 }
 
 // Deletes an existing item in the todo list
@@ -53,6 +53,8 @@ function saveData() {
 	//
 }
 
-window.onload = (event) => {
-	window.electronAPI.test("This is an argument");
+window.onload = async (event) => {
+	window.electronAPI.test("Init successful");
+	todoData = await window.electronAPI.load();
+	console.log(todoData);
 };

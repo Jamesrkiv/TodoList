@@ -34,10 +34,16 @@ app.whenReady().then(() => {
     	if (BrowserWindow.getAllWindows().length === 0) createWindow()
   	});
   	ipcMain.handle('testing', test);
+  	ipcMain.handle('loadData', loadData);
 });
 
 // ADDITIONAL FUNCTIONS /////////////////////////////////////////////////////////////////////////////////////
 
 function test(event, arg) {
-	console.log("Test", arg);
+	console.log("Test:", arg);
+}
+
+function loadData() {
+	console.log("Data loaded");
+	return 411;
 }
