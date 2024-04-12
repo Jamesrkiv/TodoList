@@ -38,6 +38,6 @@ app.whenReady().then(() => {
 
 // ADDITIONAL FUNCTIONS /////////////////////////////////////////////////////////////////////////////////////
 
-function test() {
-	console.log("Test");
+function test(event, arg) {
+	console.log("Test", arg);
 }

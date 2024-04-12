@@ -54,5 +54,5 @@ function saveData() {
 }
 
 window.onload = (event) => {
-	window.electronAPI.test();
+	window.electronAPI.test("This is an argument");
 };
