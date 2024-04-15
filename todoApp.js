@@ -2,26 +2,27 @@
 
 var tracking_num = parseInt(Date.now());
 var todoData = "";
-var dueDate = document.getElementById('dueDate');
 
 // FUNCTIONS ////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Creates a new item in the todo list
-async function createListItem(text, desc, due, priority, idnum) {
+async function createListItem(text, due, priority, idnum) {
 	var priorityHTML = "";
+	var dueHTML = "";
 	switch(priority) {
-		case "low":
-			priorityHTML = ' <span class="badge bg-info rounded-pill v-middle">Low</span>';
+		case "Low":
+			priorityHTML = '<span class="badge bg-info rounded-pill v-middle">Low</span>';
 			break;
-		case "med":
-			priorityHTML = ' <span class="badge bg-warning rounded-pill v-middle">Med</span>';
+		case "Medium":
+			priorityHTML = '<span class="badge bg-warning rounded-pill v-middle">Med</span>';
 			break;
-		case "high":
-			priorityHTML = ' <span class="badge bg-danger rounded-pill v-middle">High</span>';
+		case "High":
+			priorityHTML = '<span class="badge bg-danger rounded-pill v-middle">High</span>';
 			break;
 		default:
 			break;
 	}
+	if (due) dueHTML = '<span class="badge bg-secondary rounded-pill v-middle">'+due+'</span> ';
 	var item = '<li class="d-flex list-group-item p-3 overflow-hidden" id="item'+idnum+'">'+
 					'<button type="button" class="inln btn btn-outline-success" style="height: 50px; width:50px" onclick="deleteListItem('+idnum+');test();">'+
 						'<svg xmlns="http://www.w3.org/2000/svg" width="25" height="34" fill="currentColor" class="bi bi-check btn-icon" viewBox="0 0 16 16">'+
@@ -29,38 +30,73 @@ async function createListItem(text, desc, due, priority, idnum) {
 						'</svg>'+
 					'</button>'+
 					'<div id="todo-info-div">'+
-						'<a class="inln p-2 normal-a v-middle">'+text+'</a>'+
-						'<span class="badge bg-secondary rounded-pill v-middle">'+due+'</span>'+
+						'<p class="inln p-2 normal-a v-middle">'+text+'</p>'+
+						dueHTML+
 						priorityHTML+
 					'</div>'+
 				'</li>';
 	var list = document.getElementById("todo-list");
 	list.innerHTML += item;
-	await saveData();
+	await saveData(/*TODO*/);
 }
 
 // Deletes an existing item in the todo list
-function deleteListItem(idnum) {
+async function deleteListItem(idnum) {
 	document.getElementById("item"+idnum).remove();
+	await deleteData(/*TODO*/);
 }
 
 // Function to run when the form for creating a new todo list item is submitted
 function submitItemForm() {
-	// createListItem("Test list item "+tracking_num, "Test", "04/08/24", "high", tracking_num);
+	var desc = document.getElementById("inputDesc");
+	var due = document.getElementById("dueDate");
+	var priority = document.getElementById("selectPriority");
+	var descInput = document.getElementById("inputDesc");
+
+	if (!descInput.checkValidity()) {
+		descInput.classList.add("is-invalid");
+		return;
+	}
+	
+	createListItem(desc.value, due.value, priority.value, tracking_num);
+	$("#item-modal").modal('hide');
 	tracking_num++;
+	desc.value = "";
+	due.value = "";
+	priority.value = "None";
+	descInput.classList.remove("is-invalid");
 }
 
+// Function to run when the form for creating a new todo list item is cancelled
+function cancelItemForm() {
+	$("#item-modal").modal('hide');
+	document.getElementById("inputDesc").value = "";
+	document.getElementById("dueDate").value = "";
+	document.getElementById("selectPriority").value = "None";
+	document.getElementById("inputDesc").classList.remove("is-invalid");
+}
+
+// Save data to the db
 function saveData() {
-	//
+	// TODO
 }
 
+// Remove data from the db
+function deleteData() {
+	// TODO
+}
+
+// Runs when webpage loaded
 window.onload = async (event) => {
 	window.electronAPI.test("Init successful");
 	todoData = await window.electronAPI.load();
 	console.log(todoData);
+	/*
+	var dueDate = document.getElementById('dueDate');
+	dueDate.addEventListener('change', (e) => {
+		let dueDateVal = e.target.value;
+		document.getElementById('dueDateSelected').innerText = dueDateVal;
+	});
+	*/
 };
 
-dueDate.addEventListener('change', (e) => {
-	let dueDateVal = e.target.value;
-	document.getElementById('dueDateSelected').innerText = dueDateVal;
-});
