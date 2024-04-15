@@ -1,5 +1,5 @@
 # Another Todo List
-This is just meant to be a simple todo list app to keep me in practice and potentially get a useful tool out of it. The inevitable feature creep will also be a good opportunity to learn some new things.
+This is just meant to be a simple todo list app to keep me in practice and potentially get a useful tool out of. The inevitable feature creep will also be a good opportunity to learn some new things.
 <br>
 
 ### Packaging with Electron
