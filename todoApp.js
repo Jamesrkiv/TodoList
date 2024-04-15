@@ -2,6 +2,7 @@
 
 var tracking_num = parseInt(Date.now());
 var todoData = "";
+var dueDate = document.getElementById('dueDate');
 
 // FUNCTIONS ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -28,7 +29,7 @@ async function createListItem(text, desc, due, priority, idnum) {
 						'</svg>'+
 					'</button>'+
 					'<div id="todo-info-div">'+
-						'<a class="inln p-2 normal-a v-middle" href="#">'+text+'</a>'+
+						'<a class="inln p-2 normal-a v-middle">'+text+'</a>'+
 						'<span class="badge bg-secondary rounded-pill v-middle">'+due+'</span>'+
 						priorityHTML+
 					'</div>'+
@@ -45,7 +46,7 @@ function deleteListItem(idnum) {
 
 // Function to run when the form for creating a new todo list item is submitted
 function submitItemForm() {
-	createListItem("Test list item "+tracking_num, "Test", "04/08/24", "high", tracking_num);
+	// createListItem("Test list item "+tracking_num, "Test", "04/08/24", "high", tracking_num);
 	tracking_num++;
 }
 
@@ -58,3 +59,8 @@ window.onload = async (event) => {
 	todoData = await window.electronAPI.load();
 	console.log(todoData);
 };
+
+dueDate.addEventListener('change', (e) => {
+	let dueDateVal = e.target.value;
+	document.getElementById('dueDateSelected').innerText = dueDateVal;
+});

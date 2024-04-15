@@ -45,5 +45,13 @@ function test(event, arg) {
 
 function loadData() {
 	console.log("Data loaded");
-	return 411;
+	return new Promise((resolve, reject) => {
+		db.find({}, function (err, docs) {
+			if (err) {
+				console.error(err);
+				resolve(null);
+			}
+			else resolve(docs);
+		});
+	});
 }
