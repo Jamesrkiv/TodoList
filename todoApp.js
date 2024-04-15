@@ -6,7 +6,7 @@ var todoData = "";
 // FUNCTIONS ////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Creates a new item in the todo list
-async function createListItem(text, due, priority, idnum) {
+function createListItem(desc, due, priority, idnum) {
 	var priorityHTML = "";
 	var dueHTML = "";
 	switch(priority) {
@@ -30,20 +30,19 @@ async function createListItem(text, due, priority, idnum) {
 						'</svg>'+
 					'</button>'+
 					'<div id="todo-info-div">'+
-						'<p class="inln p-2 normal-a v-middle">'+text+'</p>'+
+						'<p class="inln p-2 normal-a v-middle">'+desc+'</p>'+
 						dueHTML+
 						priorityHTML+
 					'</div>'+
 				'</li>';
 	var list = document.getElementById("todo-list");
 	list.innerHTML += item;
-	await saveData(/*TODO*/);
 }
 
 // Deletes an existing item in the todo list
 async function deleteListItem(idnum) {
 	document.getElementById("item"+idnum).remove();
-	await deleteData(/*TODO*/);
+	await deleteData(idnum);
 }
 
 // Function to run when the form for creating a new todo list item is submitted
@@ -59,6 +58,7 @@ function submitItemForm() {
 	}
 	
 	createListItem(desc.value, due.value, priority.value, tracking_num);
+	saveData(desc.value, due.value, priority.value, tracking_num);
 	$("#item-modal").modal('hide');
 	tracking_num++;
 	desc.value = "";
@@ -77,26 +77,26 @@ function cancelItemForm() {
 }
 
 // Save data to the db
-function saveData() {
-	// TODO
+function saveData(text, due, priority, idnum) {
+	var doc = {
+		txt: text,
+		due: due,
+		pri: priority,
+		idn: idnum
+	};
+	window.electronAPI.save(doc);
 }
 
 // Remove data from the db
-function deleteData() {
-	// TODO
+function deleteData(idnum) {
+	window.electronAPI.delete(idnum);
 }
 
 // Runs when webpage loaded
 window.onload = async (event) => {
-	window.electronAPI.test("Init successful");
+	// window.electronAPI.test("Init successful");
 	todoData = await window.electronAPI.load();
-	console.log(todoData);
-	/*
-	var dueDate = document.getElementById('dueDate');
-	dueDate.addEventListener('change', (e) => {
-		let dueDateVal = e.target.value;
-		document.getElementById('dueDateSelected').innerText = dueDateVal;
-	});
-	*/
+	for (var i = 0; i < todoData.length; i++)
+		createListItem(todoData[i]["txt"], todoData[i]["due"], todoData[i]["pri"], todoData[i]["idn"]);
 };
 

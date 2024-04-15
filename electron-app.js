@@ -35,6 +35,8 @@ app.whenReady().then(() => {
   	});
   	ipcMain.handle('testing', test);
   	ipcMain.handle('loadData', loadData);
+  	ipcMain.handle('saveData', saveData);
+  	ipcMain.handle('delData', delData);
 });
 
 // ADDITIONAL FUNCTIONS /////////////////////////////////////////////////////////////////////////////////////
@@ -53,5 +55,19 @@ function loadData() {
 			}
 			else resolve(docs);
 		});
+	});
+}
+
+function saveData(event, arg) {
+	console.log("Data saved");
+	db.insert(arg, function(err, newDoc) {
+		if (err) console.error(err);
+	});
+}
+
+function delData(event, arg) {
+	console.log("Document deleted");
+	db.remove({idn:arg}, {}, function (err, numRemoved) {
+		if (err) console.error(err);
 	});
 }
