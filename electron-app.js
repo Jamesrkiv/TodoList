@@ -3,6 +3,7 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const { contextBridge, ipcRenderer } = require('electron/renderer');
 const path = require('node:path');
+if (require('electron-squirrel-startup')) app.quit();
 
 const windowStateKeeper = require('electron-window-state');
 let win;

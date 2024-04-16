@@ -1,13 +1,14 @@
 {
-  "name": "Simple Todo List",
+  "name": "SimpleTodoList",
   "version": "1.0.0",
-  "description": "This is just meant to be a simple todo list app to keep me in practice and potentially get a useful tool out of it. The inevitable feature creep will also be a good opportunity to learn some new things.\r <br>",
+  "icon": "icon.ico",
+  "description": "A simple todo list application",
   "main": "electron-app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron-forge start",
     "package": "electron-forge package",
-    "make": "electron-forge make"
+    "make": "electron-forge make --icon=icon.ico"
   },
   "author": "James Kent",
   "license": "ISC",
@@ -20,21 +21,12 @@
     "@electron-forge/plugin-auto-unpack-natives": "^7.4.0",
     "@electron-forge/plugin-fuses": "^7.4.0",
     "@electron/fuses": "^1.8.0",
-    "electron": "^29.3.0"
+    "electron": "^29.3.0",
+    "electron-winstaller": "^5.3.0"
   },
   "dependencies": {
     "electron-squirrel-startup": "^1.0.0",
     "electron-window-state": "^5.0.3",
     "nedb": "^1.8.0"
-  },
-  "config": {
-    "forge": {
-      "makers": [
-        {
-          "name": "@electron-forge/maker-zip",
-          "config": {}
-        }
-      ]
-    }
   }
 }
