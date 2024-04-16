@@ -1,6 +1,7 @@
 // GLOBAL VARIABLES /////////////////////////////////////////////////////////////////////////////////////////
 
 var tracking_num = parseInt(Date.now());
+var currentSort = "default";
 
 // FUNCTIONS ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -71,6 +72,7 @@ function submitItemForm() {
 	}
 	createListItem(desc.value, due.value, priorityv, tracking_num);
 	saveData(desc.value, due.value, priorityv, tracking_num);
+	resort();
 	$("#item-modal").modal('hide');
 	tracking_num++;
 	desc.value = "";
@@ -114,6 +116,7 @@ async function defaultSort() {
 	for (var i = 0; i < data.length; i++) {
 		createListItem(data[i]["txt"], data[i]["due"], data[i]["pri"], data[i]["idn"]);
 	}
+	currentSort = "default";
 }
 
 // Sorts by priority, secondary sort by ID
@@ -132,6 +135,7 @@ async function prioritySort() {
 	for (var i = 0; i < data.length; i++) {
 		createListItem(data[i]["txt"], data[i]["due"], data[i]["pri"], data[i]["idn"]);
 	}
+	currentSort = "priority";
 }
 
 // Sorts by due date, secondary sort by ID
@@ -153,6 +157,24 @@ async function dateSort() {
 	});
 	for (var i = 0; i < data.length; i++) {
 		createListItem(data[i]["txt"], data[i]["due"], data[i]["pri"], data[i]["idn"]);
+	}
+	currentSort = "date";
+}
+
+// Function for refreshing the list according to the current sort method
+function resort()
+{
+	switch(currentSort) {
+		default:
+		case "default":
+			defaultSort();
+			break;
+		case "priority":
+			prioritySort();
+			break;
+		case "date":
+			dateSort();
+			break;
 	}
 }
 
