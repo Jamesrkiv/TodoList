@@ -1,0 +1,1 @@
+powershell.exe -NoExit npm run package
