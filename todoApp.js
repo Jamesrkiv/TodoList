@@ -162,8 +162,7 @@ async function dateSort() {
 }
 
 // Function for refreshing the list according to the current sort method
-function resort()
-{
+function resort() {
 	switch(currentSort) {
 		default:
 		case "default":
