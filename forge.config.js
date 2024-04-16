@@ -1,13 +1,13 @@
 module.exports = {
   packagerConfig: {
     name: 'Todo',
-    icon: './icon',
+    icon: './resc/icon',
   },
   makers: [
     {
       name: '@electron-forge/maker-squirrel',
       // iconUrl: '',
-      setupIcon: './icon.ico',
+      setupIcon: './resc/icon.ico',
       config: {
         certificateFile: './cert.pfx',
         certificatePassword: process.env.CERTIFICATE_PASSWORD

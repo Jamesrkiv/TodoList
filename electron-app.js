@@ -9,7 +9,7 @@ const windowStateKeeper = require('electron-window-state');
 let win;
 
 var Datastore = require('nedb')
-  , db = new Datastore({ filename: './todoData', autoload: true });
+  , db = new Datastore({ filename: './resc/todoData', autoload: true });
 
 // APP FUNCTIONALITY ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -25,15 +25,15 @@ const createWindow = () => {
 		x: mainWindowState.x,
 		y: mainWindowState.y,
 		autoHideMenuBar: true,
-		icon: __dirname + '/icon.ico',
+		icon: __dirname + '/resc/icon.ico',
 		webPreferences: {
-			preload: path.join(__dirname, 'preload.js'),
+			preload: path.join(__dirname, 'resc/preload.js'),
 			nodeIntegration: false,
 			contextIsolation: true,
 		}
 	});
 	mainWindowState.manage(win);
-	win.loadFile('todoApp.html');
+	win.loadFile('resc/todoApp.html');
 }
 
 // Quit app if all windows closed
