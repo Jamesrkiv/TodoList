@@ -3,16 +3,4 @@ This is just meant to be a simple todo list app to keep me in practice and poten
 <br>
 
 ### Packaging with Electron
-If all goes to plan, Electron will be used in order to package this web application into something usable on it's own. PySimpleGUI isn't supposed to be used "at work" and Java Swing makes me sad, so I'd mostly like to see how easy it is to create GUI-enabled applications without such tools. If this doesn't work how I'd like it to, I guess we're going back to Swing.
-<br>
-
-```mermaid
-graph TB
-L[/Plan features & layout/] ==> A
-A(Initial development as web app) ==> B(Integrate Electron/Node.js)
-B ==> C(Package standalone app w/ Electron)
-C -.->|Everything is broken| A
-
-A -.->|Bugfixes| A
-B -.->|Bugfixes| B
-```
+The application can be run using the '_start-electron.bat' file for development purposes. Otherwise, '_npm-build.bat' will create a build of the app under a new folder. The '_winstaller.bat' batch file is inteded to be ran after a build is created in order to create an installer. Currently, I only intend to develop this for use with Windows since that's all I'll use it for.
