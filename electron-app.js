@@ -17,6 +17,7 @@ const createWindow = () => {
 		icon: __dirname + '/icon.ico',
 		webPreferences: {
 			preload: path.join(__dirname, 'preload.js'),
+			nodeIntegration: false,
 			contextIsolation: true,
 		}
 	});
