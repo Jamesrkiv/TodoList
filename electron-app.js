@@ -3,6 +3,10 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const { contextBridge, ipcRenderer } = require('electron/renderer');
 const path = require('node:path');
+
+const windowStateKeeper = require('electron-window-state');
+let win;
+
 var Datastore = require('nedb')
   , db = new Datastore({ filename: './todoData', autoload: true });
 
@@ -10,9 +14,15 @@ var Datastore = require('nedb')
 
 // Create app window
 const createWindow = () => {
+	let mainWindowState = windowStateKeeper({
+		defaultWidth: 1000,
+		defaultHeight: 800
+	});
 	const win = new BrowserWindow({
-		width: 800,
-		height: 1000,
+		width: mainWindowState.width,
+		height: mainWindowState.height,
+		x: mainWindowState.x,
+		y: mainWindowState.y,
 		autoHideMenuBar: true,
 		icon: __dirname + '/icon.ico',
 		webPreferences: {
@@ -21,6 +31,7 @@ const createWindow = () => {
 			contextIsolation: true,
 		}
 	});
+	mainWindowState.manage(win);
 	win.loadFile('todoApp.html');
 }
 
