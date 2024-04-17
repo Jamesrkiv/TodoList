@@ -2,6 +2,8 @@
 
 var tracking_num = parseInt(Date.now());
 var currentSort = "default";
+var dragEnabled = true;
+var dragging = null;
 
 // FUNCTIONS ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -23,7 +25,7 @@ function createListItem(desc, due, priority, idnum) {
 			break;
 	}
 	if (due) dueHTML = '<span class="badge bg-secondary rounded-pill v-middle">'+due+'</span> ';
-	var item = '<li class="d-flex list-group-item p-3 overflow-hidden" id="item'+idnum+'">'+
+	var item = '<li class="d-flex list-group-item p-3 overflow-hidden" draggable="true" id="item'+idnum+'">'+
 					'<button type="button" class="inln btn btn-outline-success" style="height: 50px; width:50px" onclick="deleteListItem('+idnum+');">'+
 						'<svg xmlns="http://www.w3.org/2000/svg" width="25" height="34" fill="currentColor" class="bi bi-check btn-icon" viewBox="0 0 16 16">'+
 							'<path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"/>'+
@@ -107,7 +109,7 @@ function deleteData(idnum) {
 }
 
 // Sorts by ID number to put in order created
-async function defaultSort() {
+async function idSort() {
 	document.getElementById("todo-list").innerHTML = "";
 	var data = await window.electronAPI.load();
 	data.sort(function(a,b) { 
@@ -116,7 +118,7 @@ async function defaultSort() {
 	for (var i = 0; i < data.length; i++) {
 		createListItem(data[i]["txt"], data[i]["due"], data[i]["pri"], data[i]["idn"]);
 	}
-	currentSort = "default";
+	currentSort = "id";
 }
 
 // Sorts by priority, secondary sort by ID
@@ -165,8 +167,8 @@ async function dateSort() {
 function resort() {
 	switch(currentSort) {
 		default:
-		case "default":
-			defaultSort();
+		case "id":
+			idSort();
 			break;
 		case "priority":
 			prioritySort();
@@ -177,8 +179,69 @@ function resort() {
 	}
 }
 
+// DRAGGING /////////////////////////////////////////////////////////////////////////////////////////////////
+
+document.addEventListener('dragstart', function(event) {
+    var target = getLI(event.target);
+    if (target.nodeName == undefined || target.classList.contains('no-drop')) return;
+    dragging = target;
+    event.dataTransfer.setData('text/plain', null);
+    event.dataTransfer.setDragImage(self.dragging,0,0);
+});
+
+document.addEventListener('dragover', function(event) {
+    event.preventDefault();
+    var target = getLI(event.target);
+    if (target.nodeName == undefined || target.classList.contains('no-drop')) return;
+    var bounding = target.getBoundingClientRect()
+    var offset = bounding.y + (bounding.height/2);
+    if (event.clientY - offset > 0) {
+       	target.style['border-bottom'] = 'solid 1px grey';
+        target.style['border-top'] = '';
+    }
+    else {
+        target.style['border-top'] = 'solid 1px grey';
+        target.style['border-bottom'] = '';
+    }
+});
+
+document.addEventListener('dragleave', function(event) {
+    var target = getLI(event.target);
+    if (target.nodeName == undefined || target.classList.contains('no-drop')) return;
+    target.style['border-bottom'] = '';
+    target.style['border-top'] = '';
+});
+
+document.addEventListener('drop', function(event) {
+    event.preventDefault();
+    var target = getLI(event.target);
+    if (target.nodeName == undefined || target.classList.contains('no-drop')) return;
+    if (target.style['border-bottom'] !== '') {
+        target.style['border-bottom'] = '';
+        target.parentNode.insertBefore(dragging, event.target.nextSibling);
+    }
+    else {
+        target.style['border-top'] = '';
+        target.parentNode.insertBefore(dragging, event.target);
+    }
+});
+
+function getLI(target) {
+    while (target.nodeName.toLowerCase() != 'li' && target.nodeName.toLowerCase() != 'body') {
+        target = target.parentNode;
+    }
+    if (target.nodeName.toLowerCase() == 'body') {
+        return false;
+    }
+    else {
+        return target;
+    }
+}
+
+// SCRIPT START /////////////////////////////////////////////////////////////////////////////////////////////
+
 // Runs when webpage loaded
 window.onload = (event) => {
-	defaultSort();
+	idSort();
 }
 

@@ -57,7 +57,7 @@
 		<!-- Navbar header -->
 		<nav class="navbar navbar-expand-sm navbar-light bg-light p-2 sticky-top shadow-sm" id="main-navbar">
 			<div class="container-fluid">
-				<a class="navbar-brand" href="#">Todo List</a>
+				<a class="navbar-brand" draggable="false" href="#">Todo List</a>
 				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 			      	<span class="navbar-toggler-icon"></span>
 		      	</button>
@@ -65,12 +65,13 @@
 		      	<div class="collapse navbar-collapse" id="navbarSupportedContent">
   					<ul class="navbar-nav me-auto mb-lg-0">
 						<!-- Dropdown -->
-						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Sort by...</a>
-							<ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-								<li><a class="dropdown-item" href="javascript:defaultSort();">Default</a></li>
-								<li><a class="dropdown-item" href="javascript:dateSort();">Due by date</a></li>
-								<li><a class="dropdown-item" href="javascript:prioritySort();">Priority</a></li>
+						<li class="nav-item dropdown no-drop">
+							<a class="nav-link dropdown-toggle no-drop" draggable="false" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Sort by...</a>
+							<ul class="dropdown-menu no-drop" aria-labelledby="navbarDropdownMenuLink">
+								<li class="no-drop"><a class="dropdown-item" draggable="false" href="#">Default (Custom)</a></li>
+								<li class="no-drop"><a class="dropdown-item" draggable="false" href="javascript:idSort();">Order created</a></li>
+								<li class="no-drop"><a class="dropdown-item" draggable="false" href="javascript:dateSort();">Due by date</a></li>
+								<li class="no-drop"><a class="dropdown-item" draggable="false" href="javascript:prioritySort();">Priority</a></li>
 							</ul>
 						</li>
   					</ul>
