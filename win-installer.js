@@ -8,6 +8,8 @@ resultPromise = electronInstaller.createWindowsInstaller({
 	setupIcon: './resc/icon.ico',
 	noMsi: true,
 	description: 'A simple todo list application',
+	certificateFile: './resc/cert.pfx',
+    certificatePassword: process.env.CERTIFICATE_PASSWORD,
 });
 
 resultPromise.then(() => console.log("Winstaller complete!"), (e) => console.log(`No dice: ${e.message}`));
