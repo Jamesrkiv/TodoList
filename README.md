@@ -3,7 +3,7 @@ This is just meant to be a simple todo list app to keep me in practice and poten
 <br>
 
 ### Packaging with Electron
-The application can be run using the _\_start-electron.bat_ file for development purposes. Otherwise, _\_npm-build.bat_ will create a build of the app under a new folder. The _\_winstaller.bat_ batch file is intended to be ran after a build is created in order to create an installer. Currently, I only intend to develop this for use with Windows since that's all I'll use it for.
+After setting up your node modules, the application can be run using the _\_start-electron.bat_ file for development purposes. Otherwise, _\_npm-build.bat_ will create a build of the app under a new folder. The _\_winstaller.bat_ batch file is intended to be ran after a build is created in order to create an installer. Currently, I only intend to develop this for use with Windows since that's all I'll use it for.
 
 ### Feature Creep
 With a majority of the initial work being done, here's some of my plans for how I can needlessly increase the complexity of this project:
