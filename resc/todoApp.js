@@ -113,7 +113,8 @@ async function idSort() {
 	document.getElementById("todo-list").innerHTML = "";
 	var data = await window.electronAPI.load();
 	data.sort(function(a,b) { 
-		return a.idn - b.idn
+		// Compare IDs
+		return a.idn - b.idn;
 	});
 	for (var i = 0; i < data.length; i++) {
 		createListItem(data[i]["txt"], data[i]["due"], data[i]["pri"], data[i]["idn"]);
@@ -122,17 +123,30 @@ async function idSort() {
 
 // Sorts by priority, secondary sort by ID
 async function prioritySort() {
+	if (document.getElementById("todo-list").innerHTML.trim() == "") return;
 	currentSort = "priority";
 	dragEnabled = false;
 	document.getElementById("todo-list").innerHTML = "";
 	var data = await window.electronAPI.load();
+	var oData = await window.electronAPI.loadOrder();
 	data.sort(function(a,b) {
-		if (b.pri > a.pri) return 1;
+		var ref = oData[0]["data"];
+		var a_int = parseInt(a.idn);
+		var b_int = parseInt(b.idn);
+		// Check if item is new
+		if ((a.pri == 0 && ref.indexOf(a_int) == -1) && !(b.pri == 0 && ref.indexOf(b_int) == -1)) return 1;
+		else if (!(a.pri == 0 && ref.indexOf(a_int) == -1) && (b.pri == 0 && ref.indexOf(b_int) == -1)) return -1;
+		// Compare priority values
+		else if (b.pri > a.pri) return 1;
 		else if (b.pri < a.pri) return -1;
-		else {
-			if (a.idn > b.idn) return 1;
-			else if (a.idn < b.idn) return -1;
-			else return 0;
+		else { // Secondary sort by custom order
+			if (ref.indexOf(a_int) > ref.indexOf(b_int)) return 1;
+			else if (ref.indexOf(a_int) < ref.indexOf(b_int)) return -1;
+			else { // Tertiary sort by ID
+				if (a.idn > b.idn) return 1;
+				else if (a.idn < b.idn) return -1;
+				else return 0;
+			}
 		}
 	});
 	for (var i = 0; i < data.length; i++) {
@@ -142,20 +156,33 @@ async function prioritySort() {
 
 // Sorts by due date, secondary sort by ID
 async function dateSort() {
+	if (document.getElementById("todo-list").innerHTML.trim() == "") return;
 	currentSort = "date";
 	dragEnabled = false;
 	document.getElementById("todo-list").innerHTML = "";
 	var data = await window.electronAPI.load();
+	var oData = await window.electronAPI.loadOrder();
 	data.sort(function(a,b) { 
-		if (a.due.trim() == "" && b.due.trim() != "") return 1; 
+		var ref = oData[0]["data"];
+		var a_int = parseInt(a.idn);
+		var b_int = parseInt(b.idn);
+		// Check if item is new
+		if ((a.pri == 0 && ref.indexOf(a_int) == -1) && !(b.pri == 0 && ref.indexOf(b_int) == -1)) return 1;
+		else if (!(a.pri == 0 && ref.indexOf(a_int) == -1) && (b.pri == 0 && ref.indexOf(b_int) == -1)) return -1;
+		// Check if a date is missing
+		else if (a.due.trim() == "" && b.due.trim() != "") return 1; 
 		else if (a.due.trim() != "" && b.due.trim() == "") return -1;
-		else {
+		else { // Compare dates
 			if (new Date(a.due) > new Date(b.due)) return 1;
 			else if (new Date(a.due) < new Date(b.due)) return -1;
-			else {
-				if (a.idn > b.idn) return 1;
-				else if (a.idn < b.idn) return -1;
-				else return 0;
+			else { // Secondary sort by custom order
+				if (ref.indexOf(a_int) > ref.indexOf(b_int)) return 1;
+				else if (ref.indexOf(a_int) < ref.indexOf(b_int)) return -1;
+				else { // Tertiary sort by ID
+					if (a.idn > b.idn) return 1;
+					else if (a.idn < b.idn) return -1;
+					else return 0;
+				}
 			}
 		}
 	});
@@ -197,12 +224,13 @@ async function customSort() {
 		var ref = oData[0]["data"];
 		var a_int = parseInt(a.idn);
 		var b_int = parseInt(b.idn);
+		// Check if one value not in reference array
 		if (ref.indexOf(a_int) == -1 && ref.indexOf(b_int) != -1) return 1;
 		else if (ref.indexOf(a_int) != -1 && ref.indexOf(b_int) == -1) return -1;
-		else {
+		else { // Compare values based on position in reference array
 			if (ref.indexOf(a_int) > ref.indexOf(b_int)) return 1;
 			else if (ref.indexOf(a_int) < ref.indexOf(b_int)) return -1;
-			else {
+			else { // Secondary sort by ID
 				if (a_int > b_int) return 1;
 				else if (a_int < b_int) return -1;
 				else return 0;
