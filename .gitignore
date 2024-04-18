@@ -1,4 +1,4 @@
 node_modules/
-resc/todoData
-resc/ordrData
+/resc/todoData
+/resc/ordrData
 out/
