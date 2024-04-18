@@ -108,7 +108,7 @@ function deleteData(idnum) {
 	window.electronAPI.delete(idnum);
 }
 
-// Sorts by ID number to put in order created
+// Sorts by ID number to put in order created, to be used by customSort
 async function idSort() {
 	document.getElementById("todo-list").innerHTML = "";
 	var data = await window.electronAPI.load();
@@ -118,11 +118,12 @@ async function idSort() {
 	for (var i = 0; i < data.length; i++) {
 		createListItem(data[i]["txt"], data[i]["due"], data[i]["pri"], data[i]["idn"]);
 	}
-	currentSort = "id";
 }
 
 // Sorts by priority, secondary sort by ID
 async function prioritySort() {
+	currentSort = "priority";
+	dragEnabled = false;
 	document.getElementById("todo-list").innerHTML = "";
 	var data = await window.electronAPI.load();
 	data.sort(function(a,b) {
@@ -137,11 +138,12 @@ async function prioritySort() {
 	for (var i = 0; i < data.length; i++) {
 		createListItem(data[i]["txt"], data[i]["due"], data[i]["pri"], data[i]["idn"]);
 	}
-	currentSort = "priority";
 }
 
 // Sorts by due date, secondary sort by ID
 async function dateSort() {
+	currentSort = "date";
+	dragEnabled = false;
 	document.getElementById("todo-list").innerHTML = "";
 	var data = await window.electronAPI.load();
 	data.sort(function(a,b) { 
@@ -160,15 +162,14 @@ async function dateSort() {
 	for (var i = 0; i < data.length; i++) {
 		createListItem(data[i]["txt"], data[i]["due"], data[i]["pri"], data[i]["idn"]);
 	}
-	currentSort = "date";
 }
 
 // Function for refreshing the list according to the current sort method
 function resort() {
 	switch(currentSort) {
 		default:
-		case "id":
-			idSort();
+		case "custom":
+			customSort();
 			break;
 		case "priority":
 			prioritySort();
@@ -181,16 +182,43 @@ function resort() {
 
 // Sorts by custom order, secondary sort by ID
 async function customSort() {
+	currentSort = "custom";
 	document.getElementById("todo-list").innerHTML = "";
 	var data = await window.electronAPI.load();
 	var oData = await window.electronAPI.loadOrder();
-	// TODO: Finish function
-	// If ID isn't in oData, append to end sorted by ID
-	// TODO: Implement function calls
+	if (oData.length == 0) { // No data? Default to idSort
+		console.log("No order data found, sorting by ID");
+		await idSort();
+		if (document.getElementById("todo-list").innerHTML.trim() == "") return;
+		await saveListOrder();
+		return;
+	}
+	data.sort(function(a,b) {
+		var ref = oData[0]["data"];
+		var a_int = parseInt(a.idn);
+		var b_int = parseInt(b.idn);
+		if (ref.indexOf(a_int) == -1 && ref.indexOf(b_int) != -1) return 1;
+		else if (ref.indexOf(a_int) != -1 && ref.indexOf(b_int) == -1) return -1;
+		else {
+			if (ref.indexOf(a_int) > ref.indexOf(b_int)) return 1;
+			else if (ref.indexOf(a_int) < ref.indexOf(b_int)) return -1;
+			else {
+				if (a_int > b_int) return 1;
+				else if (a_int < b_int) return -1;
+				else return 0;
+			}
+		}
+	});
+	for (var i = 0; i < data.length; i++) {
+		createListItem(data[i]["txt"], data[i]["due"], data[i]["pri"], data[i]["idn"]);
+	}
+	saveListOrder();
+	dragEnabled = true;
 }
 
 // Saves current list order as custom order
 function saveListOrder() {
+	if (currentSort != "custom") return;
 	var orderArr = [];
 	var tList = document.getElementById('todo-list');
 	var tItems = tList.querySelectorAll('li');
@@ -203,7 +231,6 @@ function saveListOrder() {
 		data: orderArr
 	}
 	window.electronAPI.saveOrder(doc);
-	// TODO: Implement function calls
 }
 
 // DRAGGING /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -243,7 +270,6 @@ document.addEventListener('drop', function(event) {
     if (target.nodeName == undefined || target.classList.contains('no-drop')) return;
     var bounding = target.getBoundingClientRect();
     var offset = bounding.y + (bounding.height/2);
-    console.log(event.clientY - offset);
     if (event.clientY - offset > 0) {
         target.style['background-color'] = '';
         target.parentNode.insertBefore(dragging, event.target.nextSibling);
@@ -252,6 +278,7 @@ document.addEventListener('drop', function(event) {
         target.style['background-color'] = '';
         target.parentNode.insertBefore(dragging, event.target);
     }
+    saveListOrder();
 });
 
 // Gets list item
@@ -271,6 +298,6 @@ function getLI(target) {
 
 // Runs when webpage loaded
 window.onload = (event) => {
-	idSort();
+	customSort();
 }
 
