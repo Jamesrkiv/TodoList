@@ -25,7 +25,7 @@ function createListItem(desc, due, priority, idnum) {
 			break;
 	}
 	if (due) dueHTML = '<span class="badge bg-secondary rounded-pill v-middle">'+due+'</span> ';
-	var item = '<li class="d-flex list-group-item p-3 overflow-hidden" draggable="true" id="item'+idnum+'">'+
+	var item = '<li class="d-flex list-group-item p-3 overflow-hidden" draggable="true" id="'+idnum+'">'+
 					'<button type="button" class="inln btn btn-outline-success" style="height: 50px; width:50px" onclick="deleteListItem('+idnum+');">'+
 						'<svg xmlns="http://www.w3.org/2000/svg" width="25" height="34" fill="currentColor" class="bi bi-check btn-icon" viewBox="0 0 16 16">'+
 							'<path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"/>'+
@@ -43,7 +43,7 @@ function createListItem(desc, due, priority, idnum) {
 
 // Deletes an existing item in the todo list
 async function deleteListItem(idnum) {
-	document.getElementById("item"+idnum).remove();
+	document.getElementById(''+idnum).remove();
 	await deleteData(idnum);
 }
 
@@ -179,9 +179,38 @@ function resort() {
 	}
 }
 
+// Sorts by custom order, secondary sort by ID
+async function customSort() {
+	document.getElementById("todo-list").innerHTML = "";
+	var data = await window.electronAPI.load();
+	var oData = await window.electronAPI.loadOrder();
+	// TODO: Finish function
+	// If ID isn't in oData, append to end sorted by ID
+	// TODO: Implement function calls
+}
+
+// Saves current list order as custom order
+function saveListOrder() {
+	var orderArr = [];
+	var tList = document.getElementById('todo-list');
+	var tItems = tList.querySelectorAll('li');
+
+	for (var i = 0; i < tItems.length; i++) {
+		orderArr.push(parseInt(tItems[i].id));
+	}
+	var doc = {
+		dataCat: 'order',
+		data: orderArr
+	}
+	window.electronAPI.saveOrder(doc);
+	// TODO: Implement function calls
+}
+
 // DRAGGING /////////////////////////////////////////////////////////////////////////////////////////////////
 
+// Item starts being dragged
 document.addEventListener('dragstart', function(event) {
+	if (!dragEnabled) return;
     var target = getLI(event.target);
     if (target.nodeName == undefined || target.classList.contains('no-drop')) return;
     dragging = target;
@@ -189,43 +218,43 @@ document.addEventListener('dragstart', function(event) {
     event.dataTransfer.setDragImage(self.dragging,0,0);
 });
 
+// Item dragged over target
 document.addEventListener('dragover', function(event) {
+	if (!dragEnabled) return;
     event.preventDefault();
     var target = getLI(event.target);
     if (target.nodeName == undefined || target.classList.contains('no-drop')) return;
-    var bounding = target.getBoundingClientRect()
-    var offset = bounding.y + (bounding.height/2);
-    if (event.clientY - offset > 0) {
-       	target.style['border-bottom'] = 'solid 1px grey';
-        target.style['border-top'] = '';
-    }
-    else {
-        target.style['border-top'] = 'solid 1px grey';
-        target.style['border-bottom'] = '';
-    }
+    target.style['background-color'] = '#F2F2FC';
 });
 
+// Item no longer dragged over target
 document.addEventListener('dragleave', function(event) {
+	if (!dragEnabled) return;
     var target = getLI(event.target);
     if (target.nodeName == undefined || target.classList.contains('no-drop')) return;
-    target.style['border-bottom'] = '';
-    target.style['border-top'] = '';
+    target.style['background-color'] = '';
 });
 
+// Inserts item in new location (drops on target)
 document.addEventListener('drop', function(event) {
+	if (!dragEnabled) return;
     event.preventDefault();
     var target = getLI(event.target);
     if (target.nodeName == undefined || target.classList.contains('no-drop')) return;
-    if (target.style['border-bottom'] !== '') {
-        target.style['border-bottom'] = '';
+    var bounding = target.getBoundingClientRect();
+    var offset = bounding.y + (bounding.height/2);
+    console.log(event.clientY - offset);
+    if (event.clientY - offset > 0) {
+        target.style['background-color'] = '';
         target.parentNode.insertBefore(dragging, event.target.nextSibling);
     }
     else {
-        target.style['border-top'] = '';
+        target.style['background-color'] = '';
         target.parentNode.insertBefore(dragging, event.target);
     }
 });
 
+// Gets list item
 function getLI(target) {
     while (target.nodeName.toLowerCase() != 'li' && target.nodeName.toLowerCase() != 'body') {
         target = target.parentNode;

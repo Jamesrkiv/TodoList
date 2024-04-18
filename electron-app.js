@@ -78,7 +78,8 @@ function handleSquirrelEvent() {
 // DATABASE /////////////////////////////////////////////////////////////////////////////////////////////////
 
 var Datastore = require('nedb')
-	, db = new Datastore({ filename: './resc/todoData', autoload: true });
+	, db1 = new Datastore({ filename: './resc/todoData', autoload: true })
+	, db2 = new Datastore({ filename: './resc/ordrData', autoload: true });
 
 // APP FUNCTIONALITY ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -121,37 +122,78 @@ app.whenReady().then(() => {
 	ipcMain.handle('loadData', loadData);
 	ipcMain.handle('saveData', saveData);
 	ipcMain.handle('delData', delData);
+	ipcMain.handle('loadOrder', loadOrder);
+	ipcMain.handle('saveOrder', saveOrder);
 });
 
 // ADDITIONAL FUNCTIONS /////////////////////////////////////////////////////////////////////////////////////
+
+// db1 - Todo list data
 
 function test(event, arg) {
 	console.log("Test:", arg);
 }
 
 function loadData() {
-	console.log("Data loaded");
 	return new Promise((resolve, reject) => {
-		db.find({}, function (err, docs) {
+		db1.find({}, function (err, docs) {
 			if (err) {
 				console.error(err);
 				resolve(null);
 			}
-			else resolve(docs);
+			else {
+				console.log("Data loaded");
+				resolve(docs);
+			}
 		});
 	});
 }
 
 function saveData(event, arg) {
-	console.log("Data saved");
-	db.insert(arg, function(err, newDoc) {
+	db1.insert(arg, function(err, newDoc) {
 		if (err) console.error(err);
+		else console.log("Data saved");
 	});
 }
 
 function delData(event, arg) {
-	console.log("Document deleted");
-	db.remove({idn:arg}, {}, function (err, numRemoved) {
+	db1.remove({idn:arg}, {}, function (err, numRemoved) {
 		if (err) console.error(err);
+		else console.log("Document deleted");
+	});
+}
+
+// db2 - Custom sort order data, etc.
+/* Example doc defining order of item IDs:
+	{
+		dataCat: order
+		data: [1234, 1233, 1235, 1103]
+	}
+*/
+
+function loadOrder() {
+	return new Promise((resolve, reject) => {
+		db2.find({}, function (err, docs) {
+			if (err) {
+				console.error(err);
+				resolve(null);
+			}
+			else {
+				console.log("Order data loaded");
+				resolve(docs);
+			}
+		});
+	});
+}
+
+function saveOrder(event, arg) {
+	db2.remove({dataCat:'order'}, {}, function (err, numRemoved) {
+		if (err) console.error(err);
+		else {
+			db2.insert(arg, function(err, newDoc) {
+				if (err) console.error(err);
+				else console.log("Order data overwritten");
+			});
+		}
 	});
 }
