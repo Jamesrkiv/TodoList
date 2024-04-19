@@ -16,69 +16,70 @@ if (handleSquirrelEvent()) {
 
 // Yoinked function from electron's documentation
 function handleSquirrelEvent() {
-  if (process.argv.length === 1) {
-    return false;
-  }
+	if (process.argv.length === 1) {
+		return false;
+	}
 
-  const ChildProcess = require('child_process');
-  const appFolder = path.resolve(process.execPath, '..');
-  const rootAtomFolder = path.resolve(appFolder, '..');
-  const updateDotExe = path.resolve(path.join(rootAtomFolder, 'Update.exe'));
-  const exeName = path.basename(process.execPath);
+	const ChildProcess = require('child_process');
+	const appFolder = path.resolve(process.execPath, '..');
+	const rootAtomFolder = path.resolve(appFolder, '..');
+	const updateDotExe = path.resolve(path.join(rootAtomFolder, 'Update.exe'));
+	const exeName = path.basename(process.execPath);
 
-  const spawn = function(command, args) {
-    let spawnedProcess, error;
+	const spawn = function(command, args) {
+		let spawnedProcess, error;
 
-    try {
-      spawnedProcess = ChildProcess.spawn(command, args, {detached: true});
-    } catch (error) {}
+		try {
+			spawnedProcess = ChildProcess.spawn(command, args, {detached: true});
+		} catch (error) {}
 
-    return spawnedProcess;
-  };
+		return spawnedProcess;
+	};
 
-  const spawnUpdate = function(args) {
-    return spawn(updateDotExe, args);
-  };
+	const spawnUpdate = function(args) {
+		return spawn(updateDotExe, args);
+	};
 
-  const squirrelEvent = process.argv[1];
-  switch (squirrelEvent) {
-    case '--squirrel-install':
-    case '--squirrel-updated':
-      // Optionally do things such as:
-      // - Add your .exe to the PATH
-      // - Write to the registry for things like file associations and
-      //   explorer context menus
+	const squirrelEvent = process.argv[1];
+	switch (squirrelEvent) {
+		case '--squirrel-install':
+		case '--squirrel-updated':
+			// Optionally do things such as:
+			// - Add your .exe to the PATH
+			// - Write to the registry for things like file associations and
+			//   explorer context menus
 
-      // Install desktop and start menu shortcuts
-      spawnUpdate(['--createShortcut', exeName]);
+			// Install desktop and start menu shortcuts
+			spawnUpdate(['--createShortcut', exeName]);
 
-      setTimeout(app.quit, 1000);
-      return true;
+			setTimeout(app.quit, 1000);
+			return true;
 
-    case '--squirrel-uninstall':
-      // Undo anything you did in the --squirrel-install and
-      // --squirrel-updated handlers
+		case '--squirrel-uninstall':
+			// Undo anything you did in the --squirrel-install and
+			// --squirrel-updated handlers
 
-      // Remove desktop and start menu shortcuts
-      spawnUpdate(['--removeShortcut', exeName]);
+			// Remove desktop and start menu shortcuts
+			spawnUpdate(['--removeShortcut', exeName]);
 
-      setTimeout(app.quit, 1000);
-      return true;
+			setTimeout(app.quit, 1000);
+			return true;
 
-    case '--squirrel-obsolete':
-      // This is called on the outgoing version of your app before
-      // we update to the new version - it's the opposite of
-      // --squirrel-updated
+		case '--squirrel-obsolete':
+			// This is called on the outgoing version of your app before
+			// we update to the new version - it's the opposite of
+			// --squirrel-updated
 
-      app.quit();
-      return true;
-  }
+			app.quit();
+			return true;
+	}
 };
 
 // DATABASE /////////////////////////////////////////////////////////////////////////////////////////////////
 
 var Datastore = require('nedb')
-  , db = new Datastore({ filename: './resc/todoData', autoload: true });
+	, db1 = new Datastore({ filename: './resc/todoData', autoload: true })
+	, db2 = new Datastore({ filename: './resc/ordrData', autoload: true });
 
 // APP FUNCTIONALITY ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -121,37 +122,72 @@ app.whenReady().then(() => {
 	ipcMain.handle('loadData', loadData);
 	ipcMain.handle('saveData', saveData);
 	ipcMain.handle('delData', delData);
+	ipcMain.handle('loadOrder', loadOrder);
+	ipcMain.handle('saveOrder', saveOrder);
 });
 
 // ADDITIONAL FUNCTIONS /////////////////////////////////////////////////////////////////////////////////////
+
+// db1 - Todo list data
 
 function test(event, arg) {
 	console.log("Test:", arg);
 }
 
 function loadData() {
-	console.log("Data loaded");
 	return new Promise((resolve, reject) => {
-		db.find({}, function (err, docs) {
+		db1.find({}, function (err, docs) {
 			if (err) {
 				console.error(err);
 				resolve(null);
 			}
-			else resolve(docs);
+			else {
+				console.log("Data loaded");
+				resolve(docs);
+			}
 		});
 	});
 }
 
 function saveData(event, arg) {
-	console.log("Data saved");
-	db.insert(arg, function(err, newDoc) {
+	db1.insert(arg, function(err, newDoc) {
 		if (err) console.error(err);
+		else console.log("Data saved");
 	});
 }
 
 function delData(event, arg) {
-	console.log("Document deleted");
-	db.remove({idn:arg}, {}, function (err, numRemoved) {
+	db1.remove({idn:arg}, {}, function (err, numRemoved) {
 		if (err) console.error(err);
+		else console.log("Document deleted");
+	});
+}
+
+// db2 - Custom sort order data, etc.
+
+function loadOrder() {
+	return new Promise((resolve, reject) => {
+		db2.find({dataCat:'order'}, function (err, docs) {
+			if (err) {
+				console.error(err);
+				resolve(null);
+			}
+			else {
+				console.log("Order data loaded");
+				resolve(docs);
+			}
+		});
+	});
+}
+
+function saveOrder(event, arg) {
+	db2.remove({dataCat:'order'}, {}, function (err, numRemoved) {
+		if (err) console.error(err);
+		else {
+			db2.insert(arg, function(err, newDoc) {
+				if (err) console.error(err);
+				else console.log("Order data overwritten");
+			});
+		}
 	});
 }

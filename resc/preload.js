@@ -7,4 +7,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
   load: () => ipcRenderer.invoke('loadData'),
   save: (doc) => ipcRenderer.invoke('saveData', doc),
   delete: (idn) => ipcRenderer.invoke('delData', idn),
+  loadOrder: () => ipcRenderer.invoke('loadOrder'),
+  saveOrder: (doc) => ipcRenderer.invoke('saveOrder', doc),
 });
