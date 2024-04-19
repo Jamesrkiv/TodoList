@@ -164,16 +164,10 @@ function delData(event, arg) {
 }
 
 // db2 - Custom sort order data, etc.
-/* Example doc defining order of item IDs:
-	{
-		dataCat: order
-		data: [1234, 1233, 1235, 1103]
-	}
-*/
 
 function loadOrder() {
 	return new Promise((resolve, reject) => {
-		db2.find({}, function (err, docs) {
+		db2.find({dataCat:'order'}, function (err, docs) {
 			if (err) {
 				console.error(err);
 				resolve(null);
