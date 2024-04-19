@@ -4,6 +4,7 @@ var tracking_num = parseInt(Date.now());
 var currentSort = "default";
 var dragEnabled = true;
 var dragging = null;
+var darkmode = false;
 
 // FUNCTIONS ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -279,7 +280,7 @@ document.addEventListener('dragover', function(event) {
     event.preventDefault();
     var target = getLI(event.target);
     if (target.nodeName == undefined || target.classList.contains('no-drop')) return;
-    target.style['background-color'] = '#F2F2FC';
+    target.style['background-color'] = (darkmode) ? '#34383B' : '#F2F2FC';
 });
 
 // Item no longer dragged over target
@@ -322,10 +323,50 @@ function getLI(target) {
     }
 }
 
+// Retrieves saved color mode, defaults to light
+async function loadColorMode() {
+	var colorMode = await window.electronAPI.loadMode();
+	if (colorMode.length == 0) return "light";
+	else return colorMode[0].data;
+}
+
 // SCRIPT START /////////////////////////////////////////////////////////////////////////////////////////////
 
 // Runs when webpage loaded
-window.onload = (event) => {
+window.onload = async (event) => {
+	// Initial sort
 	customSort();
-}
 
+	// Load color mode
+	switch(await loadColorMode())
+	{
+		case "light":
+			document.getElementById('page-html').dataset.bsTheme = "light";
+			document.getElementById('main-navbar').classList.add('bg-light');
+			break;
+		case "dark":
+			document.getElementById('page-html').dataset.bsTheme = "dark";
+			document.getElementById('main-navbar').classList.add('bg-dark');
+			document.getElementById('d-switch').checked = true;
+			break;
+	}
+
+	// Update color mode
+	$("#darkmode-check").change(function () {
+		var mainNav = document.getElementById('main-navbar');
+    	if (document.getElementById('d-switch').checked) {
+    		darkmode = true;
+    		document.getElementById('page-html').dataset.bsTheme = "dark";
+    		mainNav.classList.add('bg-dark');
+    		mainNav.classList.remove('bg-light');
+    		window.electronAPI.saveMode("dark");
+    	}
+    	else {
+    		darkmode = false;
+    		document.getElementById('page-html').dataset.bsTheme = "light";
+    		mainNav.classList.add('bg-light');
+    		mainNav.classList.remove('bg-dark');
+    		window.electronAPI.saveMode("light");
+    	}
+    });
+}

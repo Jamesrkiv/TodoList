@@ -9,7 +9,7 @@ After setting up your node modules, the application can be run using the _\_star
 With a majority of the initial work being done, here's some of my plans for how I can needlessly increase the complexity of this project:
 - [X] Add drag & drop for the list, at least in default sort mode (rename to custom or add custom sort option?)
 	- I'd likely need to maintain a separate db to track the user-assigned order of the items
-- [ ] Dark mode
+- [X] Dark mode
 - [ ] Deleted items archive
 	- May just be for last _x_ items, rather than all
 - [ ] Counters/stats

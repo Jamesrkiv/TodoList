@@ -124,6 +124,8 @@ app.whenReady().then(() => {
 	ipcMain.handle('delData', delData);
 	ipcMain.handle('loadOrder', loadOrder);
 	ipcMain.handle('saveOrder', saveOrder);
+	ipcMain.handle('saveMode', saveMode);
+	ipcMain.handle('loadMode', loadMode);
 });
 
 // ADDITIONAL FUNCTIONS /////////////////////////////////////////////////////////////////////////////////////
@@ -170,7 +172,7 @@ function loadOrder() {
 		db2.find({dataCat:'order'}, function (err, docs) {
 			if (err) {
 				console.error(err);
-				resolve(null);
+				resolve([]);
 			}
 			else {
 				console.log("Order data loaded");
@@ -187,6 +189,34 @@ function saveOrder(event, arg) {
 			db2.insert(arg, function(err, newDoc) {
 				if (err) console.error(err);
 				else console.log("Order data overwritten");
+			});
+		}
+	});
+}
+
+function loadMode() {
+	return new Promise((resolve, reject) => {
+		db2.find({dataCat:'color'}, function (err, docs) {
+			if (err) {
+				console.error(err);
+				resolve([]);
+			}
+			else {
+				console.log("Color mode loaded");
+				resolve(docs);
+			}
+		});
+	});
+}
+
+function saveMode(event, arg) {
+	db2.remove({dataCat:'color'}, {}, function (err, numRemoved) {
+		if (err) console.error(err);
+		else {
+			var doc = { dataCat:'color', data:arg };
+			db2.insert(doc, function(err, newDoc) {
+				if (err) console.error(err);
+				else console.log("Color mode saved");
 			});
 		}
 	});

@@ -9,4 +9,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
   delete: (idn) => ipcRenderer.invoke('delData', idn),
   loadOrder: () => ipcRenderer.invoke('loadOrder'),
   saveOrder: (doc) => ipcRenderer.invoke('saveOrder', doc),
+  saveMode: (mode) => ipcRenderer.invoke('saveMode', mode),
+  loadMode: () => ipcRenderer.invoke('loadMode'),
 });
