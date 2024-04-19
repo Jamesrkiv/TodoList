@@ -14,5 +14,7 @@ With a majority of the initial work being done, here's some of my plans for how 
 	- May just be for last _x_ items, rather than all
 - [ ] Counters/stats
 	- Completed items count, subcategories based on priority, etc.
+- [ ] In-app clock
+	- Probably not a good idea, but it's an idea
 
 Some of these are just ideas, I won't necessarily actually add all this.
