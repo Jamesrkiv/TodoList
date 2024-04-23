@@ -11,6 +11,7 @@ With a majority of the initial work being done, here's some of my plans for how 
 	- I'd likely need to maintain a separate db to track the user-assigned order of the items
 - [X] Dark mode
 - [ ] Installer options to make start/desktop icons optional
+- [ ] Figure out how squirrel updates work
 - [ ] Undo recent delete option
 	- Could be a popup that hovers at the bottom of the screen for a few seconds
 - [ ] Deleted items archive

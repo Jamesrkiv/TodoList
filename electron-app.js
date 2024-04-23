@@ -75,6 +75,11 @@ function handleSquirrelEvent() {
 	}
 };
 
+// Process running for first time
+if (process.argv[1] == '--squirrel-firstrun') {
+	// Stuff here
+}
+
 // DATABASE /////////////////////////////////////////////////////////////////////////////////////////////////
 
 var Datastore = require('nedb')
