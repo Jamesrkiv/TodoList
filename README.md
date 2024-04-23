@@ -10,11 +10,13 @@ With a majority of the initial work being done, here's some of my plans for how 
 - [X] Add drag & drop for the list, at least in default sort mode (rename to custom or add custom sort option?)
 	- I'd likely need to maintain a separate db to track the user-assigned order of the items
 - [X] Dark mode
+- [ ] Installer options to make start/desktop icons optional
+- [ ] Undo recent delete option
+	- Could be a popup that hovers at the bottom of the screen for a few seconds
 - [ ] Deleted items archive
 	- May just be for last _x_ items, rather than all
 - [ ] Counters/stats
 	- Completed items count, subcategories based on priority, etc.
 - [ ] In-app clock
-	- Probably not a good idea, but it's an idea
 
 Some of these are just ideas, I won't necessarily actually add all this.
