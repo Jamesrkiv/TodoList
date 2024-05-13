@@ -1,6 +1,6 @@
 {
   "name": "SimpleTodoList",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "icon": "resc/icon.ico",
   "description": "A simple todo list application",
   "main": "electron-app.js",
