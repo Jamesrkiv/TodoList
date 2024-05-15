@@ -16,6 +16,7 @@ With a majority of the initial work being done, here's some of my plans for how 
 	- Could be a popup that hovers at the bottom of the screen for a few seconds
 - [ ] Deleted items archive
 	- May just be for last _x_ items, rather than all
+- [ ] Add message where tasks are shown when all items are completed 
 - [ ] Counters/stats
 	- Completed items count, subcategories based on priority, etc.
 - [ ] In-app clock
