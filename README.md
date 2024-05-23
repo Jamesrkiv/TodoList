@@ -12,6 +12,10 @@ With a majority of the initial work being done, here's some of my plans for how 
 - [X] Dark mode
 - [ ] ~Installer options to make start/desktop icons optional~ (Would need custom NSIS installer)
 - [ ] Figure out how squirrel updates work
+- [ ] Add editing for existing items
+- [ ] Add special section for tasks dated for today
+	- What about items without a date?
+	- Could be added via special sort option or highlighting
 - [ ] Undo recent delete option
 	- Could be a popup that hovers at the bottom of the screen for a few seconds
 - [ ] Deleted items archive
